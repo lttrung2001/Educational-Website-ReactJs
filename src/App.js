@@ -9,24 +9,39 @@ import Blog from "./components/blog/Blog"
 import Contact from "./components/contact/Contact"
 import Footer from "./components/common/footer/Footer"
 import Home from "./components/home/Home"
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Home />,
+    },
+    {
+      path: "/about",
+      element: <About />,
+    },
+    {
+      path: "/courses",
+      element: <CourseHome />,
+    },
+    {
+      path: "/team",
+      element: <Team />,
+    },
+    {
+      path: "/pricing",
+      element: <Pricing />,
+    },
+    {
+      path: "/contact",
+      element: <Contact />,
+    },
+  ]);
   return (
     <>
-      <Router>
-        <Header />
-        <Switch>
-          <Route exact path='/' component={Home} />
-          <Route exact path='/about' component={About} />
-          <Route exact path='/courses' component={CourseHome} />
-          <Route exact path='/team' component={Team} />
-          <Route exact path='/pricing' component={Pricing} />
-          <Route exact path='/journal' component={Blog} />
-          <Route exact path='/contact' component={Contact} />
-        </Switch>
-        <Footer />
-      </Router>
+    <RouterProvider router={router} />
     </>
-  )
+  );
 }
 
 export default App
