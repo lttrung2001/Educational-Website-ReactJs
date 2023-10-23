@@ -8,7 +8,7 @@ const apiHelper = axios.create({
     },
 })
 
-export default (): AxiosInstance => {
+export default () => {
     // apiHelper.interceptors.request.use((config) => {
     //     config.baseURL = "http://localhost:8080/"
     //     const accessToken = localStorage.getItem(ACCESS_TOKEN)

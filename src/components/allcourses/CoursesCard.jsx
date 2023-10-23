@@ -3,6 +3,7 @@ import "./courses.css"
 import { coursesCard } from "../../dummydata"
 
 const CoursesCard = (props) => {
+  const courses = props.courses;
   return (
     <>
       <section className='coursesCard'>
