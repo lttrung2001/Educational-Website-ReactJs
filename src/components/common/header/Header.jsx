@@ -1,10 +1,19 @@
-import React, { useState } from "react"
-import { Link } from "react-router-dom"
+import React from "react"
+import { Link, useNavigate } from "react-router-dom"
 import Head from "./Head"
 import "./header.css"
+import { ACCESS_TOKEN } from "../../../utils/Axios"
+import { Button, Box } from "@mui/material"
 
 const Header = () => {
-  const [click, setClick] = useState(false)
+  const [click, setClick] = React.useState(false)
+  const [token, setToken] = React.useState(localStorage.getItem(ACCESS_TOKEN));
+  const navigator = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    setToken(null);
+  }
 
   return (
     <>
@@ -35,7 +44,41 @@ const Header = () => {
             </li>
           </ul>
           <div className='start'>
-            <div className='button'>GET CERTIFICATE</div>
+            {/* <div className='button'>GET CERTIFICATE</div> */}
+            {token ? <div ><Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+              <Button
+                onClick={handleLogout}
+                key={"Logout"}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Logout
+              </Button>
+            </Box>
+            </div> :
+              <div style={{
+                display: 'flex', flexDirection: 'row'
+              }}>
+                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                  <Button
+                    onClick={() => navigator("/login")}
+                    key={"Login"}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                  >
+                    Login
+                  </Button>
+                </Box>
+                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                  <Button
+                    onClick={() => navigator("/register")}
+                    key={"Register"}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                  >
+                    Register
+                  </Button>
+                </Box>
+              </div>
+            }
+
           </div>
           <button className='toggle' onClick={() => setClick(!click)}>
             {click ? <i className='fa fa-times'> </i> : <i className='fa fa-bars'></i>}

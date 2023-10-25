@@ -1,12 +1,12 @@
-import axios, { AxiosInstance } from "axios"
-import jwtDecode, { JwtPayload } from "jwt-decode"
+import axios, { AxiosInstance } from "axios";
+import jwtDecode, { JwtPayload } from "jwt-decode";
 
 const apiHelper = axios.create({
     baseURL: "http://localhost:8080/",
     headers: {
         "Content-Type": "application/json"
     },
-})
+});
 
 export default () => {
     // apiHelper.interceptors.request.use((config) => {
@@ -29,10 +29,10 @@ export default () => {
     // })
     
     apiHelper.interceptors.response.use((response) => {
-        console.log(response.data)
-        return response
+        console.log(response);
+        return response;
     })
-    return apiHelper
+    return apiHelper;
 }
 
-const ACCESS_TOKEN = "ACCESS_TOKEN"
+export const ACCESS_TOKEN = "ACCESS_TOKEN";

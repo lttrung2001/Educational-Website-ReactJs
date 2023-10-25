@@ -1,13 +1,11 @@
-import React from "react"
-import { team } from "../../dummydata"
-
-const TeamCard = () => {
+const TeamCard = (props) => {
+  const teams = props.teams;
   return (
     <>
-      {team.map((val) => (
-        <div className='items shadow'>
+      {teams.map((val) => (
+        <div className='items shadow' key={val.id}>
           <div className='img'>
-            <img src={val.cover} alt='' />
+            <img src={"https://i.stack.imgur.com/l60Hf.png"} alt='' />
             <div className='overlay'>
               <i className='fab fa-facebook-f icon'></i>
               <i className='fab fa-twitter icon'></i>
@@ -16,8 +14,8 @@ const TeamCard = () => {
             </div>
           </div>
           <div className='details'>
-            <h2>{val.name}</h2>
-            <p>{val.work}</p>
+            <h2>{val.fullName}</h2>
+            <p>{val.fullName}</p>
           </div>
         </div>
       ))}

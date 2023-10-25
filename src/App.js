@@ -8,6 +8,8 @@ import Blog from "./components/blog/Blog"
 import Contact from "./components/contact/Contact"
 import Home from "./components/home/Home"
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import SignIn from "./components/login/login"
+import SignUp from './components/signup/signup';
 function App() {
   const router = createBrowserRouter([
     {
@@ -33,6 +35,14 @@ function App() {
     {
       path: "/contact",
       element: <Contact />,
+    },
+    {
+      path: "/login",
+      element: <SignIn />,
+    },
+    {
+      path: "/register",
+      element: <SignUp />,
     },
   ]);
   return (
