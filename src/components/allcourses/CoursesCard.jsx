@@ -1,12 +1,71 @@
-import { Box, Button, CardMedia, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
-import React from "react"
+import React, { useState } from "react"
 import "./courses.css"
+import { Autocomplete, Box, Button, CardMedia, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, FormControl, Grid, Input, InputLabel, List, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Select, TextField, Typography, selectClasses } from "@mui/material";
+import { DialogTitle } from '@mui/material';
+import { CloudUploadRounded } from "@mui/icons-material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
+import apiHelper from "../../utils/Axios.js";
+import { DataGrid, GridDeleteIcon, GridViewColumnIcon } from "@mui/x-data-grid";
 
 const CoursesCard = (props) => {
+  const classroomColumns = [
+    { field: "id", headerName: "ID" },
+    { field: "name", headerName: "Name", flex: 1 },
+    { field: "startDate", headerName: "Start date", flex: 1, valueGetter: (params) => dayjs(params.row?.startDate).format("DD/MM/YYYY")},
+    {
+      field: "action",
+      headerName: "Action",
+      sortable: false,
+      renderCell: ({ row }) => (
+        <Button onClick={() => onPayClicked(row)}>
+          Pay
+        </Button>
+      ),
+    }
+  ];
+
+  const callCreatePayment = async (requestData) => {
+    try {
+      const response = await apiHelper().post("/payments/create", requestData);
+      window.location.replace(response.data);
+    } catch (e) {
+      setError(e.response.data.message);
+    }
+  };
+
+  const onPayClicked = (row) => {
+    const requestData = {
+      price: selectedCourse.tuition
+    };
+    callCreatePayment(requestData);
+  };
+
+  const [paginationModel, setPaginationModel] = React.useState({
+    pageSize: 25,
+    page: 0,
+  });
+  const [error, setError] = useState();
   const [open, setOpen] = React.useState(false);
   const [selectedCourse, setSelectedCourse] = React.useState();
+  const [classrooms, setClassrooms] = useState();
+
+  const callGetClassrooms = async () => {
+    try {
+      const response = await apiHelper().get(`/classrooms/registerable?courseId=${selectedCourse.id}`);
+      setClassrooms(response.data);
+    } catch(e) {
+      setError(e.response.data.message);
+    } finally {
+      handleClose();
+    }
+  };
+
+  const handleGetClassrooms = () => {
+    callGetClassrooms();
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -14,6 +73,10 @@ const CoursesCard = (props) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleCloseClassroomsDialog = () => {
+    setClassrooms(null);
   };
 
   const courses = props.courses;
@@ -111,7 +174,31 @@ const CoursesCard = (props) => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleClose}>Select classroom</Button>
+            <Button onClick={handleGetClassrooms}>Select classroom</Button>
+          </DialogActions>
+        </Dialog> : <></>
+      }
+      {
+        classrooms ? <Dialog
+          open={classrooms}
+          // TransitionComponent={Transition}
+          keepMounted
+          onClose={handleCloseClassroomsDialog}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>{`Choose classroom to begin your study career`}</DialogTitle>
+          <Box mx={3} my={1}>
+          <DataGrid
+                  paginationModel={paginationModel}
+                  onPaginationModelChange={setPaginationModel}
+                  columns={classroomColumns}
+                  rows={classrooms}
+                  // onRowClick={handleStudentClicked} {...students}
+                />
+          </Box>
+          <DialogActions>
+            <Button onClick={handleCloseClassroomsDialog}>Cancel</Button>
+            <Button onClick={handleGetClassrooms}>Select classroom</Button>
           </DialogActions>
         </Dialog> : <></>
       }
