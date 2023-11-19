@@ -1,20 +1,22 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import login from "../../api/courses/account/Login";
+import login from "../../api/account/Login";
 import { useNavigate } from 'react-router-dom';
 import { ACCESS_TOKEN } from '../../utils/Axios';
+
+import { Autocomplete, Box, Button, CardMedia, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, FormControl, Grid, Input, InputLabel, List, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Select, TextField, Typography, selectClasses } from "@mui/material";
+import { DialogTitle } from '@mui/material';
+import { CloudUploadRounded } from "@mui/icons-material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 function Copyright(props) {
     return (
@@ -35,13 +37,20 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
     const navigator = useNavigate();
-    const callLogin = async (username, password) => {
-        const response = await login(username, password);
-        console.log(response.token);
-        localStorage.setItem(ACCESS_TOKEN, response.token);
-        navigator("/");
+    const [error, setError] = React.useState();
+
+    const callLogin = async (loginData) => {
+        try {
+            const response = await login(loginData);
+            localStorage.setItem(ACCESS_TOKEN, response.token);
+            navigator("/", {
+                replace: true
+            });
+        } catch (e) {
+            setError(e.response.data.message);
+        }
     };
-    
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -51,7 +60,11 @@ export default function SignIn() {
             password: data.get('password')
         }
         console.log(loginData);
-        callLogin(loginData.username, loginData.password);
+        callLogin(loginData);
+    };
+
+    const handleCloseErrorDialog = () => {
+        setError(null);
     };
 
     return (
@@ -112,7 +125,7 @@ export default function SignIn() {
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link href="/register" variant="body2">
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>
@@ -120,6 +133,28 @@ export default function SignIn() {
                     </Box>
                 </Box>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
+                {
+                    error ? <Dialog
+                        open={error}
+                        onClose={handleCloseErrorDialog}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Notification"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                {error}
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseErrorDialog} autoFocus>
+                                Agree
+                            </Button>
+                        </DialogActions>
+                    </Dialog> : <></>
+                }
             </Container>
         </ThemeProvider>
     );

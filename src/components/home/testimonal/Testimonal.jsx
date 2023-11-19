@@ -2,10 +2,13 @@ import React from "react"
 import { testimonal } from "../../../dummydata"
 import Heading from "../../common/heading/Heading"
 import "./style.css"
+import Header from "../../common/header/Header"
+import Footer from "../../common/footer/Footer"
 
 const Testimonal = () => {
   return (
     <>
+      <Header />
       <section className='testimonal padding'>
         <div className='container'>
           <Heading subtitle='TESTIMONIAL' title='Our Successful Students' />
@@ -29,6 +32,7 @@ const Testimonal = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   )
 }

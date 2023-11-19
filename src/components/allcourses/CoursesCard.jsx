@@ -1,6 +1,8 @@
 import { Box, Button, CardMedia, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
 import React from "react"
 import "./courses.css"
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 const CoursesCard = (props) => {
   const [open, setOpen] = React.useState(false);
@@ -109,7 +111,7 @@ const CoursesCard = (props) => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleClose}>Register</Button>
+            <Button onClick={handleClose}>Select classroom</Button>
           </DialogActions>
         </Dialog> : <></>
       }

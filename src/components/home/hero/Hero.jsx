@@ -1,10 +1,13 @@
 import React from "react"
 import Heading from "../../common/heading/Heading"
 import "./Hero.css"
+import Header from "../../common/header/Header"
+import Footer from "../../common/footer/Footer"
 
 const Hero = () => {
   return (
     <>
+      <Header />
       <section className='hero'>
         <div className='container'>
           <div className='row'>
@@ -22,6 +25,7 @@ const Hero = () => {
         </div>
       </section>
       <div className='margin'></div>
+      <Footer />
     </>
   )
 }

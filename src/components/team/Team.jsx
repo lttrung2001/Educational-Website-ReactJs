@@ -4,7 +4,7 @@ import TeamCard from "./TeamCard"
 import "./team.css"
 import Awrapper from "../about/Awrapper"
 import "../about/about.css"
-import getBestTeachers from "../../api/courses/GetBestTeachers"
+import getBestTeachers from "../../api/teachers/GetBestTeachers"
 import TeamCardData from './../../models/TeamCardData';
 import Header from "../common/header/Header"
 import Footer from "../common/footer/Footer"

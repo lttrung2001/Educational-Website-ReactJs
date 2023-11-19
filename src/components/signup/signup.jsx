@@ -1,17 +1,26 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import register from '../../api/account/Register';
+import { useNavigate } from 'react-router-dom';
+import { FormLabel, Radio, RadioGroup } from '@mui/material';
+
+import { Autocomplete, Box, Button, CardMedia, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, FormControl, Grid, Input, InputLabel, List, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Select, TextField, Typography, selectClasses } from "@mui/material";
+import { DialogTitle } from '@mui/material';
+import { CloudUploadRounded } from "@mui/icons-material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 function Copyright(props) {
   return (
@@ -31,13 +40,50 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const navigator = useNavigate();
+  const [error, setError] = React.useState();
+
+  var dobString = "";
+  var genderFlag = true
+
+  const onDobSelected = (newDate) => {
+    dobString = dayjs(newDate).format("DD/MM/YYYY");
+  };
+
+  const callRegister = async (registerData) => {
+    try {
+      await register(registerData);
+      navigator("/login", {
+        replace: true
+      });
+    } catch (e) {
+      setError(e.response.data.message);
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const registerData = {
+      username: data.get("username"),
+      password: data.get("password"),
+      fullName: data.get("fullName"),
+      dob: dobString,
+      gender: genderFlag,
+      email: data.get("email"),
+      phoneNumber: data.get("phoneNumber"),
+      address: data.get("address")
+    }
+    console.log(registerData);
+    callRegister(registerData);
+  };
+
+  const onGenderCheckedChanged = (event) => {
+    genderFlag = event.target.value;
+  };
+
+  const handleCloseErrorDialog = () => {
+    setError(null);
   };
 
   return (
@@ -60,35 +106,14 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -100,6 +125,79 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="fullName"
+                  label="Full name"
+                  name="fullName"
+                  autoComplete="fullName"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    components={[
+                      'DatePicker',
+                      'MobileDatePicker',
+                      'DesktopDatePicker',
+                      'StaticDatePicker',
+                    ]}
+                  >
+                    <DesktopDatePicker
+                      disableFuture
+                      label={"Day of birth"}
+                      format="DD/MM/YYYY"
+                      defaultValue={dayjs(new Date())}
+                      onChange={onDobSelected}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={12}>
+                <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                  onChange={onGenderCheckedChanged}
+                >
+                  <FormControlLabel value={true} control={<Radio />} label="Male" />
+                  <FormControlLabel value={false} control={<Radio />} label="Female" />
+                </RadioGroup>
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email"
+                  name="email"
+                  autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="phoneNumber"
+                  label="Phone number"
+                  name="phoneNumber"
+                  autoComplete="phoneNumber"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="address"
+                  label="Address"
+                  name="address"
+                  autoComplete="address"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -128,6 +226,28 @@ export default function SignUp() {
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>
+      {
+                    error ? <Dialog
+                        open={error}
+                        onClose={handleCloseErrorDialog}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Notification"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                {error}
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseErrorDialog} autoFocus>
+                                Agree
+                            </Button>
+                        </DialogActions>
+                    </Dialog> : <></>
+                }
     </ThemeProvider>
   );
 }
