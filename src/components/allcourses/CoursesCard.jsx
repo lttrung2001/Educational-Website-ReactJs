@@ -7,8 +7,9 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
-import apiHelper from "../../utils/Axios.js";
+import apiHelper, { MESSAGE_INVALID_TOKEN } from "../../utils/Axios.js";
 import { DataGrid, GridDeleteIcon, GridViewColumnIcon } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
 
 const CoursesCard = (props) => {
   const classroomColumns = [
@@ -51,16 +52,18 @@ const CoursesCard = (props) => {
   const [open, setOpen] = React.useState(false);
   const [selectedCourse, setSelectedCourse] = React.useState();
   const [classrooms, setClassrooms] = useState();
+  const navigator = useNavigate();
 
   const callGetClassrooms = async () => {
-    try {
-      const response = await apiHelper().get(`/classrooms/registerable?courseId=${selectedCourse.id}`);
+    apiHelper().get(`/classrooms/registerable?courseId=${selectedCourse.id}`).then((response) => {
       setClassrooms(response.data);
-    } catch(e) {
-      setError(e.response.data.message);
-    } finally {
       handleClose();
-    }
+    }, (e) => {
+      handleClose();
+      if (e.message == MESSAGE_INVALID_TOKEN) {
+        navigator("/login");
+      }
+    });
   };
 
   const handleGetClassrooms = () => {

@@ -45,5 +45,5 @@ export default () => {
     return apiHelper;
 }
 
-const MESSAGE_INVALID_TOKEN = "Token was expired or invalid!";
+export const MESSAGE_INVALID_TOKEN = "Token was expired or invalid!";
 export const ACCESS_TOKEN = "ACCESS_TOKEN";

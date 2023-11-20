@@ -10,6 +10,7 @@ import Home from "./components/home/Home"
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import SignIn from "./components/login/login"
 import SignUp from './components/signup/signup';
+import SuccessScreen from './components/payments/success';
 function App() {
   const router = createBrowserRouter([
     {
@@ -44,6 +45,10 @@ function App() {
       path: "/register",
       element: <SignUp />,
     },
+    {
+      path: "/payments/success",
+      element: <SuccessScreen />,
+    }
   ]);
   return (
     <>

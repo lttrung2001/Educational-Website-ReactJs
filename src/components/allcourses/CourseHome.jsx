@@ -7,17 +7,26 @@ import getCourses from "../../api/courses/GetCourses"
 import CourseCardData from './../../models/CoursesCardData';
 import Footer from "../common/footer/Footer"
 import Header from "../common/header/Header"
+import { MESSAGE_INVALID_TOKEN } from "../../utils/Axios";
+import { useNavigate } from "react-router-dom"
 
 const CourseHome = () => {
   const [courses, setCourses] = useState([]);
+  const [error, setError] = useState();
+  const navigator = useNavigate();
 
   useEffect(() => {
     const callGetCourses = async () => {
       const response = await getCourses();
       setCourses(response);
     };
-    callGetCourses();
-  }, [])
+      callGetCourses().catch((e) => {
+        console.log(e);
+        if (e.message == MESSAGE_INVALID_TOKEN) {
+          navigator("/login");
+        }
+      });
+    }, [])
 
   return (
     <>
