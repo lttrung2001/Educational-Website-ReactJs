@@ -9,7 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import apiHelper, { MESSAGE_INVALID_TOKEN } from "../../utils/Axios.js";
 import { DataGrid, GridDeleteIcon, GridViewColumnIcon } from "@mui/x-data-grid";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CoursesCard = (props) => {
   const classroomColumns = [
@@ -39,7 +39,8 @@ const CoursesCard = (props) => {
 
   const onPayClicked = (row) => {
     const requestData = {
-      price: selectedCourse.tuition
+      price: selectedCourse.tuition,
+      classroomId: row.id
     };
     callCreatePayment(requestData);
   };
@@ -52,6 +53,7 @@ const CoursesCard = (props) => {
   const [open, setOpen] = React.useState(false);
   const [selectedCourse, setSelectedCourse] = React.useState();
   const [classrooms, setClassrooms] = useState();
+  const [selectedClassroom, setSelectedClassroom] = React.useState();
   const navigator = useNavigate();
 
   const callGetClassrooms = async () => {
@@ -184,6 +186,7 @@ const CoursesCard = (props) => {
       {
         classrooms ? <Dialog
           open={classrooms}
+          fullScreen
           // TransitionComponent={Transition}
           keepMounted
           onClose={handleCloseClassroomsDialog}
@@ -196,7 +199,6 @@ const CoursesCard = (props) => {
                   onPaginationModelChange={setPaginationModel}
                   columns={classroomColumns}
                   rows={classrooms}
-                  // onRowClick={handleStudentClicked} {...students}
                 />
           </Box>
           <DialogActions>
