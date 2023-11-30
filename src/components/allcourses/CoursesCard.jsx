@@ -58,8 +58,12 @@ const CoursesCard = (props) => {
 
   const callGetClassrooms = async () => {
     apiHelper().get(`/classrooms/registerable?courseId=${selectedCourse.id}`).then((response) => {
-      setClassrooms(response.data);
-      handleClose();
+      if (Array.from(response.data).length == 0) {
+        setError("There is no classrooms available of this course!");
+      } else {
+        setClassrooms(response.data);
+        handleClose();
+      }
     }, (e) => {
       handleClose();
       if (e.message == MESSAGE_INVALID_TOKEN) {
@@ -82,6 +86,10 @@ const CoursesCard = (props) => {
 
   const handleCloseClassroomsDialog = () => {
     setClassrooms(null);
+  };
+
+  const handleCloseErrorDialog = () => {
+    setError(null);
   };
 
   const courses = props.courses;
@@ -204,6 +212,28 @@ const CoursesCard = (props) => {
           <DialogActions>
             <Button onClick={handleCloseClassroomsDialog}>Cancel</Button>
             <Button onClick={handleGetClassrooms}>Select classroom</Button>
+          </DialogActions>
+        </Dialog> : <></>
+      }
+      {
+        error ? <Dialog
+          open={error}
+          onClose={handleCloseErrorDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Notification"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {error}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseErrorDialog} autoFocus>
+              Agree
+            </Button>
           </DialogActions>
         </Dialog> : <></>
       }
