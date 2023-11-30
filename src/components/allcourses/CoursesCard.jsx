@@ -22,7 +22,7 @@ const CoursesCard = (props) => {
       sortable: false,
       renderCell: ({ row }) => (
         <Button onClick={() => onPayClicked(row)}>
-          Pay
+          Register
         </Button>
       ),
     }
@@ -30,20 +30,41 @@ const CoursesCard = (props) => {
 
   const callCreatePayment = async (requestData) => {
     try {
-      const response = await apiHelper().post("/payments/create", requestData);
-      window.location.replace(response.data);
+      setConfirm(null);
+      apiHelper().post("/payments/create", requestData).then((response) => {
+        window.location.replace(response.data);
+      }, (e) => {
+        setError(e.response.data.message);
+      });
+    } catch (e) {
+      setError(e.response.data.message);
+    }
+  };
+
+  const callRegisterNoPayment = async (requestData) => {
+    try {
+      setConfirm(null);
+      apiHelper().post("/payments/register-no-payment", requestData).then((response) => {
+        callGetClassrooms();
+      }, (e) => {
+        setError(e.response.data.message);
+      });
     } catch (e) {
       setError(e.response.data.message);
     }
   };
 
   const onPayClicked = (row) => {
-    const requestData = {
-      price: selectedCourse.tuition,
-      classroomId: row.id
-    };
-    callCreatePayment(requestData);
+    setConfirm(row);
+    // const requestData = {
+    //   classroomId: row.id
+    // };
+    // callCreatePayment(requestData);
   };
+  
+  const handleCloseConfirmDialog = () => {
+    setConfirm(null);
+  }
 
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 25,
@@ -54,11 +75,13 @@ const CoursesCard = (props) => {
   const [selectedCourse, setSelectedCourse] = React.useState();
   const [classrooms, setClassrooms] = useState();
   const [selectedClassroom, setSelectedClassroom] = React.useState();
+  const [confirm, setConfirm] = React.useState();
   const navigator = useNavigate();
 
   const callGetClassrooms = async () => {
     apiHelper().get(`/classrooms/registerable?courseId=${selectedCourse.id}`).then((response) => {
       if (Array.from(response.data).length == 0) {
+        setClassrooms(response.data);
         setError("There is no classrooms available of this course!");
       } else {
         setClassrooms(response.data);
@@ -233,6 +256,39 @@ const CoursesCard = (props) => {
           <DialogActions>
             <Button onClick={handleCloseErrorDialog} autoFocus>
               Agree
+            </Button>
+          </DialogActions>
+        </Dialog> : <></>
+      }
+      {
+        confirm ? <Dialog
+          open={confirm}
+          onClose={handleCloseConfirmDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Notification"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Do you want to pay now?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+          <Button onClick={() => {
+            callCreatePayment({
+              classroomId: confirm.id
+            })
+          }} autoFocus>
+              Pay now
+            </Button>
+            <Button onClick={() => {
+              callRegisterNoPayment({
+                classroomId: confirm.id
+              })
+            }} autoFocus>
+              Pay later
             </Button>
           </DialogActions>
         </Dialog> : <></>
