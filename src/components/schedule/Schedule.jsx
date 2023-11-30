@@ -35,7 +35,7 @@ const Schedule = () => {
                 if (e.message == MESSAGE_INVALID_TOKEN) {
                     localStorage.clear();
                 } else {
-                    setError(SERVICE_UNAVAILABLE);
+                    setError(e.response.data.message);
                 }
             })
         } catch (e) {
@@ -53,7 +53,7 @@ const Schedule = () => {
                 if (e.message == MESSAGE_INVALID_TOKEN) {
                     localStorage.clear();
                 } else {
-                    setError(SERVICE_UNAVAILABLE);
+                    setError(e.response.data.message);
                 }
             })
         } catch (e) {

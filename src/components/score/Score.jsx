@@ -29,7 +29,7 @@ const Score = () => {
             if (e.message == MESSAGE_INVALID_TOKEN) {
                 localStorage.clear();
             } else {
-                setError(SERVICE_UNAVAILABLE);
+                setError(e.response.data.message);
             }
         });
     };
@@ -48,7 +48,7 @@ const Score = () => {
             if (e.message == MESSAGE_INVALID_TOKEN) {
                 localStorage.clear();
             } else {
-                setError(SERVICE_UNAVAILABLE);
+                setError(e.response.data.message);
             }
         });
     };
