@@ -45,7 +45,8 @@ const CoursesCard = (props) => {
     try {
       setConfirm(null);
       apiHelper().post("/payments/register-no-payment", requestData).then((response) => {
-        callGetClassrooms();
+        // callGetClassrooms();
+        window.location.replace("/")
       }, (e) => {
         setError(e.response.data.message);
       });
@@ -81,7 +82,6 @@ const CoursesCard = (props) => {
   const callGetClassrooms = async () => {
     apiHelper().get(`/classrooms/registerable?courseId=${selectedCourse.id}`).then((response) => {
       if (Array.from(response.data).length == 0) {
-        setClassrooms(response.data);
         setError("There is no classrooms available of this course!");
       } else {
         setClassrooms(response.data);
@@ -289,6 +289,28 @@ const CoursesCard = (props) => {
               })
             }} autoFocus>
               Pay later
+            </Button>
+          </DialogActions>
+        </Dialog> : <></>
+      }
+      {
+        error ? <Dialog
+          open={error}
+          onClose={handleCloseErrorDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Notification"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {error}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseErrorDialog} autoFocus>
+              Agree
             </Button>
           </DialogActions>
         </Dialog> : <></>
