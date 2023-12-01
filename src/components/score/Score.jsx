@@ -20,7 +20,6 @@ const Score = () => {
 
     const [error, setError] = useState();
     const [scores, setScores] = React.useState([]);
-    const [classroomName, setClassroomName] = React.useState('')
 
     const callGetScores = async (requestData) => {
         apiHelper().post("/scores/student", requestData).then((response) => {
@@ -92,7 +91,8 @@ const Score = () => {
         <>
             <Header />
             <Back title='Score' />
-            <Box mx={20}>
+            {
+                classrooms ? <Box mx={20}>
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">Classroom</InputLabel>
                     <Select
@@ -104,7 +104,7 @@ const Score = () => {
                     >
                         {
                             Array.from(classrooms).map((c) => {
-                                return <MenuItem value={c}>{c.name}</MenuItem>
+                                return <MenuItem key={c.id} value={c}>{c.name}</MenuItem>
                             })
                         }
                     </Select>
@@ -120,7 +120,8 @@ const Score = () => {
                         }}
                     />
                 </div>
-            </Box>
+            </Box> : <></>
+            }
             {
                 error ? <Dialog
                     open={error}

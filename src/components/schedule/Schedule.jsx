@@ -103,7 +103,11 @@ const Schedule = () => {
 
     const handleSubjectClicked = (params) => {
         const s = params.row;
-        setDocuments(s.documents);
+        if (s.documents.length > 0) {
+            setDocuments(s.documents);
+        } else {
+            setError("This subject does not have any documents!");
+        }
     }
 
     const subjectColumns = [
