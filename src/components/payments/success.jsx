@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Button } from "@mui/material";
+import { Card, CardContent, Typography, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import apiHelper, { MESSAGE_INVALID_TOKEN, apiHelperPublic } from "../../utils/Axios";
 import React, { useEffect } from "react";
 
@@ -18,6 +18,10 @@ const SuccessScreen = () => {
     } catch (e) {
         setError(e.response.data.message);
     }
+}
+
+const handleCloseErrorDialog = () => {
+  window.location.replace("/");
 }
 
 useEffect(() => {
@@ -49,6 +53,28 @@ useEffect(() => {
         </Button>
       </CardContent>
     </Card>
+    {
+                error ? <Dialog
+                    open={error}
+                    onClose={handleCloseErrorDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {"Notification"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {error}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseErrorDialog} autoFocus>
+                            Agree
+                        </Button>
+                    </DialogActions>
+                </Dialog> : <></>
+            }
     </>
 };
 

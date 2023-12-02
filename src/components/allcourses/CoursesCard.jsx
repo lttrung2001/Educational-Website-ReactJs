@@ -12,10 +12,11 @@ import { DataGrid, GridDeleteIcon, GridViewColumnIcon } from "@mui/x-data-grid";
 import { useNavigate, useParams } from "react-router-dom";
 
 const CoursesCard = (props) => {
+  const [success, setSuccess] = React.useState();
   const classroomColumns = [
     { field: "id", headerName: "ID" },
     { field: "name", headerName: "Name", flex: 1 },
-    { field: "startDate", headerName: "Start date", flex: 1, valueGetter: (params) => dayjs(params.row?.startDate).format("DD/MM/YYYY")},
+    { field: "startDate", headerName: "Start date", flex: 1, valueGetter: (params) => dayjs(params.row?.startDate).format("DD/MM/YYYY") },
     {
       field: "action",
       headerName: "Action",
@@ -45,8 +46,7 @@ const CoursesCard = (props) => {
     try {
       setConfirm(null);
       apiHelper().post("/payments/register-no-payment", requestData).then((response) => {
-        // callGetClassrooms();
-        window.location.replace("/")
+        setSuccess("Register successfully. Please go to edu center to pay for this course!");
       }, (e) => {
         setError(e.response.data.message);
       });
@@ -62,7 +62,7 @@ const CoursesCard = (props) => {
     // };
     // callCreatePayment(requestData);
   };
-  
+
   const handleCloseConfirmDialog = () => {
     setConfirm(null);
   }
@@ -113,6 +113,10 @@ const CoursesCard = (props) => {
 
   const handleCloseErrorDialog = () => {
     setError(null);
+  };
+
+  const handleCloseSuccessDialog = () => {
+    navigator("/")
   };
 
   const courses = props.courses;
@@ -225,12 +229,12 @@ const CoursesCard = (props) => {
         >
           <DialogTitle>{`Choose classroom to begin your study career`}</DialogTitle>
           <Box mx={3} my={1}>
-          <DataGrid
-                  paginationModel={paginationModel}
-                  onPaginationModelChange={setPaginationModel}
-                  columns={classroomColumns}
-                  rows={classrooms}
-                />
+            <DataGrid
+              paginationModel={paginationModel}
+              onPaginationModelChange={setPaginationModel}
+              columns={classroomColumns}
+              rows={classrooms}
+            />
           </Box>
           <DialogActions>
             <Button onClick={handleCloseClassroomsDialog}>Cancel</Button>
@@ -239,9 +243,9 @@ const CoursesCard = (props) => {
         </Dialog> : <></>
       }
       {
-        error ? <Dialog
-          open={error}
-          onClose={handleCloseErrorDialog}
+        success ? <Dialog
+          open={success}
+          onClose={handleCloseSuccessDialog}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
@@ -250,11 +254,11 @@ const CoursesCard = (props) => {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              {error}
+              {success}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseErrorDialog} autoFocus>
+            <Button onClick={handleCloseSuccessDialog} autoFocus>
               Agree
             </Button>
           </DialogActions>
@@ -276,11 +280,11 @@ const CoursesCard = (props) => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-          <Button onClick={() => {
-            callCreatePayment({
-              classroomId: confirm.id
-            })
-          }} autoFocus>
+            <Button onClick={() => {
+              callCreatePayment({
+                classroomId: confirm.id
+              })
+            }} autoFocus>
               Pay now
             </Button>
             <Button onClick={() => {

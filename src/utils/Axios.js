@@ -45,4 +45,4 @@ export default () => {
 
 export const MESSAGE_INVALID_TOKEN = "Token was expired or invalid!";
 export const SERVICE_UNAVAILABLE = "Service is not available at this time!"
-export const ACCESS_TOKEN = "ACCESS_TOKEN";
+export const ACCESS_TOKEN = "STUDENT_SIDE_ACCESS_TOKEN";
