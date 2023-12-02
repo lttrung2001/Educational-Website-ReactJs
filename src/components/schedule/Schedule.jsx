@@ -286,7 +286,7 @@ const Schedule = () => {
           }}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>{`Subject list`}</DialogTitle>
+          <DialogTitle>{`Document list`}</DialogTitle>
           <Box mx={3} my={1}>
           <DataGrid
                   paginationModel={paginationModel}

@@ -13,6 +13,7 @@ import SignUp from './components/signup/signup';
 import SuccessScreen from './components/payments/success';
 import Schedule from "./components/schedule/Schedule"
 import Score from "./components/score/Score"
+import Registrations from "./components/registrations/Registrations"
 function App() {
   const router = createBrowserRouter([
     {
@@ -50,6 +51,10 @@ function App() {
     {
       path: "/payments/success",
       element: <SuccessScreen />,
+    },
+    {
+      path: "/registrations",
+      element: <Registrations />,
     },
     {
       path: "/schedule",

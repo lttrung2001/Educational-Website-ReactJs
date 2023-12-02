@@ -75,16 +75,15 @@ const Header = () => {
             <li>
               <Link to='/team'>Team</Link>
             </li>
-            {
-              token ? <li>
+            <li>
+              <Link to='/registrations'>Registered classrooms</Link>
+            </li>
+            <li>
               <Link to='/schedule'>Schedule</Link>
-            </li> : <></>
-            }
-            {
-              token ? <li>
+            </li>
+            <li>
               <Link to='/score'>Score</Link>
-            </li> : <></>
-            }
+            </li>
             <li>
               <Link to='/contact'>Contact</Link>
             </li>

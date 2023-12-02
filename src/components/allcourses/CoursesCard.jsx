@@ -17,6 +17,7 @@ const CoursesCard = (props) => {
     { field: "id", headerName: "ID" },
     { field: "name", headerName: "Name", flex: 1 },
     { field: "startDate", headerName: "Start date", flex: 1, valueGetter: (params) => dayjs(params.row?.startDate).format("DD/MM/YYYY") },
+    { field: "endDate", headerName: "End date", flex: 1, valueGetter: (params) => dayjs(params.row?.endDate).format("DD/MM/YYYY") },
     {
       field: "action",
       headerName: "Action",
@@ -227,7 +228,7 @@ const CoursesCard = (props) => {
           onClose={handleCloseClassroomsDialog}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>{`Choose classroom to begin your study career`}</DialogTitle>
+          <DialogTitle>{`Classroom list`}</DialogTitle>
           <Box mx={3} my={1}>
             <DataGrid
               paginationModel={paginationModel}
@@ -237,8 +238,7 @@ const CoursesCard = (props) => {
             />
           </Box>
           <DialogActions>
-            <Button onClick={handleCloseClassroomsDialog}>Cancel</Button>
-            <Button onClick={handleGetClassrooms}>Select classroom</Button>
+            <Button onClick={handleCloseClassroomsDialog}>Close</Button>
           </DialogActions>
         </Dialog> : <></>
       }
@@ -292,7 +292,7 @@ const CoursesCard = (props) => {
                 classroomId: confirm.id
               })
             }} autoFocus>
-              Pay later
+              Register and pay later
             </Button>
           </DialogActions>
         </Dialog> : <></>
