@@ -86,9 +86,9 @@ const Schedule = () => {
     });
 
     const classroomColumns = [
-        { field: "id", headerName: "Classroom ID", flex: 1 },
-        { field: "name", headerName: "Classroom Name", flex: 1 },
-        { field: "teacher.id", headerName: "Teacher", flex: 1, valueGetter: (params) => params.row?.teacher.fullName },
+        { field: "id", headerName: "Classroom ID", flex: 1, valueGetter: (params) => params.row?.classroom.id },
+        { field: "name", headerName: "Classroom Name", flex: 1, valueGetter: (params) => params.row?.classroom.name },
+        { field: "teacher.id", headerName: "Teacher", flex: 1, valueGetter: (params) => params.row?.classroom.teacher.fullName },
         { field: "startDate", headerName: "Start date", flex: 1, valueGetter: (params) => dayjs(params.row?.startDate).format("DD/MM/YYYY") },
         { field: "endDate", headerName: "End date", flex: 1, valueGetter: (params) => dayjs(params.row?.endDate).format("DD/MM/YYYY") },
     ]
@@ -97,7 +97,7 @@ const Schedule = () => {
     const [documents, setDocuments] = useState();
 
     const handleClassroomClicked = (params) => {
-        const c = params.row;
+        const c = params.row?.classroom;
         setSubjects(c.course.subjects)
     }
 
@@ -172,7 +172,7 @@ const Schedule = () => {
                 rows={classrooms}
                 onRowClick={handleClassroomClicked} {...classrooms}
                 getRowId={(row) => {
-                    return row.id
+                    return row
                 }}
             />
                 }
