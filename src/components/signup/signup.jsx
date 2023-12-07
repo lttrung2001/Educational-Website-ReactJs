@@ -64,8 +64,11 @@ export default function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    if (data.get("password").length < 8) {
+      setError("Password must be at least 8 characters!");
+      return;
+    }
     const registerData = {
-      username: data.get("username"),
       password: data.get("password"),
       fullName: data.get("fullName"),
       dob: dobString,
@@ -106,14 +109,14 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+            <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="username"
-                  label="Username"
-                  name="username"
-                  autoComplete="username"
+                  id="email"
+                  label="Email"
+                  name="email"
+                  autoComplete="email"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -168,17 +171,6 @@ export default function SignUp() {
                   <FormControlLabel value={true} control={<Radio />} label="Male" />
                   <FormControlLabel value={false} control={<Radio />} label="Female" />
                 </RadioGroup>
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email"
-                  name="email"
-                  autoComplete="email"
-                />
               </Grid>
               <Grid item xs={12}>
                 <TextField

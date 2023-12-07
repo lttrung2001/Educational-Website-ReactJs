@@ -39,6 +39,10 @@ const Header = () => {
   const handleChangePassword = (event) => {
     event.preventDefault();
     const data = new FormData(event.target);
+    if (data.get("newPassword") != data.get("confirmPassword")) {
+      setError("New password and confirm password not match!");
+      return;
+    }
     const requestData = {
       oldPassword: data.get("oldPassword"),
       newPassword: data.get("newPassword")
@@ -180,6 +184,10 @@ const Header = () => {
             <Box mx={2} my={1}>
               <Typography>New password</Typography>
               <TextField id="newPassword" name="newPassword" fullWidth type="password" />
+            </Box>
+            <Box mx={2} my={1}>
+              <Typography>Confirm password</Typography>
+              <TextField id="confirmPassword" name="confirmPassword" fullWidth type="password" />
             </Box>
             <DialogActions>
               <Button onClick={handleCloseChangePasswordDialog}>Cancel</Button>
