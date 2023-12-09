@@ -164,6 +164,7 @@ export default function SignUp() {
                 <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
                 <RadioGroup
                   row
+                  defaultValue={true}
                   aria-labelledby="demo-row-radio-buttons-group-label"
                   name="row-radio-buttons-group"
                   onChange={onGenderCheckedChanged}
@@ -176,6 +177,7 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
+                  inputProps={{ maxLength: 10, inputMode: 'tel' }}
                   id="phoneNumber"
                   label="Phone number"
                   name="phoneNumber"
